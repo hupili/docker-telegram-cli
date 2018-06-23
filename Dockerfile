@@ -30,8 +30,13 @@ RUN mkdir "$TG_HOME"
 
 RUN git clone https://github.com/vysheng/tg.git "$TG_HOME"/tg
 WORKDIR "$TG_HOME"/tg
+
+RUN apt-get update
+RUN apt-get install -y python-dev
+
 RUN git submodule update --init --recursive
-RUN ./configure --disable-liblua --disable-python && make
+RUN ./configure --disable-python --disable-json --disable-liblua
+RUN make
 ENV PATH "$TG_HOME"/tg/bin/:$PATH
 ENV TG_PUBKEY "$TG_HOME"/tg/tg-server.pub
 ENV KILLCACHE "YES PLZ! NAO!" # I just comment this out some time to trigger a rebuild from here on.
